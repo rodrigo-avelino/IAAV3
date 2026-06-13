@@ -1,0 +1,33 @@
+# Resultados experimentais pesados (gerados por execução, não versionados)
+**/resultados/*.json
+**/resultados/*.npz
+**/resultados/*.pkl
+
+# Permitir CSVs (resumos leves) e PNGs (figuras)
+!**/resultados/*.csv
+!**/resultados/*.png
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+
+# Sistema
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
