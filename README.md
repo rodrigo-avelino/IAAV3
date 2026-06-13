@@ -1,55 +1,70 @@
-# Expansão T3 e T4 — buscar o "joelho da curva"
+# IAAV3 — Meta-Heurísticas Estocásticas em Problemas de Otimização
 
-## Mudança de estratégia
+Implementações e análise comparativa de algoritmos de otimização estocástica aplicados a problemas de otimização contínua, satisfação de restrições e otimização combinatória. Trabalho desenvolvido como AV3 da disciplina de Inteligência Artificial Computacional (Universidade de Fortaleza).
 
-Os anteriores tinham o melhor parâmetro **no extremo do grid**, então
-expandir um pouco só transferiria o problema. Esta versão vai bem além
-para descobrir **onde o desempenho atinge o pico e começa a piorar**.
+## Estrutura do repositório
 
-## Arquivos
-
-| Arquivo | Status |
-|---|---|
-| `tarefa3/sintonia_expandida.py` | NOVO/REVISADO (grid mais amplo) |
-| `tarefa3/graficos.py` | MODIFICADO (heatmap combinado original + expandido) |
-| `tarefa4/sintonia_expandida.py` | NOVO/REVISADO (grid mais amplo) |
-| `tarefa4/graficos.py` | MODIFICADO (heatmap combinado fina + expandida) |
-| `tarefa4/ga_real.py` | CORRIGIDO (bug quando K > N na seleção por torneio) |
-
-## T3 — caixeiro viajante
-
-Grid: N ∈ {500, 1000, 2000} × K ∈ {5, 15}. 6 configs total.
-
-**Tempo: ~2h sequencial** (N=500 ~18min, N=1000 ~35min, N=2000 ~70min).
-
-```bash
-cd tarefa3
-python3 sintonia_expandida.py
+```
+IAAV3/
+├── tarefa1/    Otimização de seis funções multimodais (HC, LRS, GRS)
+├── tarefa2/    Problema das Oito Rainhas (Têmpera Simulada)
+├── tarefa3/    Caixeiro Viajante 3D (Algoritmo Genético permutacional)
+├── tarefa4/    Função de Rastrigin n=50 (LRS, SA, GA real-coded)
+└── relatorio/  Relatório IEEE em LaTeX
 ```
 
-Ou em partes:
-```bash
-python3 sintonia_expandida.py 500    # ~18 min
-python3 sintonia_expandida.py 1000   # ~35 min
-python3 sintonia_expandida.py 2000   # ~70 min
-python3 sintonia_expandida.py agregar
+Cada pasta `tarefa*/` contém os scripts de execução, sintonia e geração de figuras, além de um subdiretório `resultados/` com os CSVs de estatísticas e PNGs das figuras do relatório.
+
+## Algoritmos implementados
+
+| Tarefa | Problema                           | Métodos avaliados                                                              |
+|--------|------------------------------------|--------------------------------------------------------------------------------|
+| 1      | Otimização de funções multimodais  | Hill Climbing, Local Random Search, Global Random Search                       |
+| 2      | Oito Rainhas                       | Têmpera Simulada                                                               |
+| 3      | Caixeiro Viajante 3D (160 cidades) | Algoritmo Genético permutacional (OX + swap)                                   |
+| 4      | Rastrigin em 50 dimensões          | LRS, SA, GA com sigma fixo, GA com sigma decrescente, GA proporcional          |
+
+## Reprodução dos experimentos
+
+### Requisitos
+
+- Python 3.10 ou superior
+- `numpy`, `matplotlib`
+
+```
+pip install numpy matplotlib
 ```
 
-## T4 — Rastrigin
+### Execução
 
-Grid: N ∈ {2, 5, 10, 20} × σ_mut ∈ {0.5, 1.0, 2.0}. 12 configs total.
+Cada tarefa pode ser executada de forma independente a partir do seu diretório:
 
-**Tempo: ~30 min** (todas as configs rodam em ~5s/exec graças à vetorização).
-
-```bash
-cd tarefa4
-python3 sintonia_expandida.py
+```
+cd tarefa<N>
+python3 sintonia.py            # sintonia de hiperparâmetros
+python3 avaliacao_final.py     # avaliação com a configuração vencedora
+python3 graficos.py            # geração das figuras
 ```
 
-## O que me mandar depois
+Os scripts específicos variam ligeiramente entre as tarefas. Cada `resultados/` contém os CSVs com estatísticas descritivas (média, desvio-padrão, mínimo, máximo, mediana) e os PNGs das figuras utilizadas no relatório.
 
-Zipa as pastas `resultados/` (T3 e T4) e manda. Eu gero:
-- Heatmap combinado (grid original + expandido) das duas tarefas
-- Boxplot atualizado
-- Curvas de convergência
-- Análise: o joelho está dentro do grid? Se não, expandimos mais.
+### Observação sobre arquivos de dados brutos
+
+Os arquivos JSON com históricos completos de execução não são versionados (centenas de MB no total) e podem ser regerados pela reexecução dos scripts. Os CSVs com estatísticas consolidadas e os PNGs das figuras ficam versionados em cada `resultados/`.
+
+## Principais resultados
+
+- **Funções multimodais**: nenhuma das estratégias elementares supera o limiar de 50% de convergência em mais da metade das funções investigadas, com perfis de aplicabilidade distintos por topologia.
+- **Oito Rainhas**: cobertura das 92 soluções únicas atingida em 769 execuções da Têmpera Simulada, com tempo de parede inferior a 10 segundos.
+- **Caixeiro Viajante**: saturação do ganho marginal identificada em N = 10000 sob critério de redução marginal abaixo de 1%, com custo mínimo absoluto de 1746 unidades.
+- **Rastrigin**: GA com sigma decrescente atinge média de 71 unidades, superando em fator de 6x a Busca Aleatória Local pura sob orçamento computacional idêntico.
+
+## Autor
+
+Rodrigo Avelino Lucas
+Engenharia de Computação, Universidade de Fortaleza
+rodrigo-avelino@edu.unifor.br
+
+## Licença
+
+Material acadêmico de uso educacional.
